@@ -1,0 +1,123 @@
+basePath: /
+definitions:
+  types.ProcessStatus:
+    enum:
+    - PENDING
+    - RUNNING
+    - COMPLETED
+    - FAILED
+    type: string
+    x-enum-varnames:
+    - StatusPending
+    - StatusRunning
+    - StatusCompleted
+    - StatusFailed
+  types.StatusUpdate:
+    properties:
+      status:
+        $ref: '#/definitions/types.ProcessStatus'
+      timestamp:
+        type: string
+      uuid:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: Servicio de suscripción en tiempo real.
+  title: Subscription Service API
+  version: "1.0"
+paths:
+  /health:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Estado del servicio
+      tags:
+      - system
+  /status:
+    get:
+      parameters:
+      - description: UUID del proceso
+        format: uuid
+        in: query
+        name: uuid
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Consultar estado actual
+      tags:
+      - status
+  /subscribe:
+    get:
+      parameters:
+      - description: UUID del proceso
+        format: uuid
+        in: query
+        name: uuid
+        required: true
+        type: string
+      responses:
+        "101":
+          description: Switching Protocols
+          schema:
+            type: string
+      summary: Suscribirse a actualizaciones
+      tags:
+      - subscription
+  /update-status:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Datos de actualización
+        in: body
+        name: update
+        required: true
+        schema:
+          $ref: '#/definitions/types.StatusUpdate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "502":
+          description: Bad Gateway
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Actualizar estado
+      tags:
+      - status
+swagger: "2.0"

@@ -1,0 +1,35 @@
+# Binaries
+/subscription-service
+/bin/
+*.exe
+*.test
+
+# Go related
+go.sum
+vendor/
+
+# Local Environment
+.env
+.env.*
+!.env.example
+
+# Docker
+docker-compose.override.yml
+.docker/
+
+# IDEs
+.vscode/
+.idea/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Test output
+coverage.out
+test_websocket.go
